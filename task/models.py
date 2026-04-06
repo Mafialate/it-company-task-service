@@ -28,7 +28,8 @@ class Worker(AbstractUser):
     position = models.ForeignKey(
         Position,
         on_delete=models.PROTECT,
-        related_name='workers'
+        related_name='workers',
+        null=True,
     )
 
     def __str__(self):
