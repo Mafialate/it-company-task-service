@@ -28,20 +28,57 @@ class Worker(AbstractUser):
     position = models.ForeignKey(
         Position,
         on_delete=models.PROTECT,
-        related_name='workers',
+        related_name="workers",
         null=True,
     )
 
+    @property
+    def projects(self):
+        return Project.objects.filter(teams__workers=self).distinct()
+
     def __str__(self):
-        return f"{self.username} {self.position}"
+        position = self.position.name if self.position else "No position"
+        return f"{self.username} {position}"
+
+
+class Team(models.Model):
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+    )
+    workers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="teams",)
+
+    @property
+    def tasks(self):
+        return Task.objects.filter(project__teams=self).distinct()
+
+    def __str__(self):
+        return self.name
+
+
+class Project(models.Model):
+    name = models.CharField(
+        max_length=255,
+        unique=True,
+    )
+    description = models.TextField(blank=True)
+    deadline = models.DateField()
+    teams = models.ManyToManyField(Team, related_name="projects")
+
+    def workers(self):
+        return Worker.objects.filter(teams__projects=self).select_related("position").distinct()
+
+
+    def __str__(self):
+        return self.name
 
 
 class Task(models.Model):
     class Priority(models.TextChoices):
-        URGENT = "urgent", "Urgent"
-        HIGH = "high", "High"
-        MEDIUM = "medium", "Medium"
-        LOW = "low", "Low"
+        URGENT = "Urgent", "Urgent"
+        HIGH = "High", "High"
+        MEDIUM = "Medium", "Medium"
+        LOW = "Low", "Low"
 
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
@@ -52,8 +89,20 @@ class Task(models.Model):
         choices=Priority.choices,
         default=Priority.MEDIUM,
     )
-    task_type = models.ForeignKey(TaskType, on_delete=models.PROTECT, related_name="tasks")
-    assignees = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='tasks')
+    project = models.ForeignKey(
+        Project,
+        on_delete=models.CASCADE,
+        related_name="tasks",
+    )
+    workers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL,
+        related_name="tasks",
+    )
+    task_type = models.ForeignKey(
+        TaskType,
+        on_delete=models.PROTECT,
+        related_name="tasks",
+    )
 
     def __str__(self):
         return f"{self.name} {self.priority}"
