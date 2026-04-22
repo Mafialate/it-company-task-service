@@ -1,0 +1,175 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %} Author {% endblock title %}
+
+<!-- Specific CSS goes HERE -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block body_class %} blog-author bg-gray-100 {% endblock body_class %}
+
+{% block content %}
+
+  {% include "includes/navigation-light.html" %}
+
+  <section class="pt-20 position-relative">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 mx-auto">
+          <div class="row pt-lg-7 pt-5 pb-0">
+            <div class="col-lg-5 col-md-7 z-index-2 position-relative px-md-2 px-sm-5 mt-sm-0 mt-4">
+            <div class="d-flex align-items-center mb-3">
+              <div class="flex-grow-1">
+                <h3 class="mb-0">Team: {{ team.name }} - {{ team.name }}</h3>
+              </div>
+
+              <div class="d-flex gap-2">
+                <a class="btn btn-primary mb-0" href="{% url 'task:team-update' pk=team.pk %}?next={{ request.path }}">Edit</a>
+                <a class="btn btn-danger mb-0" href="{% url 'task:team-delete' pk=team.pk %}?next={{ request.path }}">Delete</a>
+              </div>
+
+            </div>
+
+            <div class="row mb-4">
+              <div class="col-auto">
+                {% if team.workers %}
+                <span class="h6">{{ team.workers.count }}</span>
+                  {% else %}
+                <span class="h6">0</span>
+                {% endif %}
+                <span>Workers</span>
+              </div>
+              <div class="col-auto">
+                {% if team.projects %}
+                <span class="h6">{{ team.projects.count }}</span>
+                  {% else %}
+                <span class="h6">0</span>
+                {% endif %}
+                <span>Projects</span>
+              </div>
+            <div class="col-auto">
+                {% if team.tasks %}
+                <span class="h6">{{ team.tasks.count }}</span>
+                  {% else %}
+                <span class="h6">0</span>
+                {% endif %}
+                <span>Tasks</span>
+              </div>
+            </div>
+              <h4>Description:</h4>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <p class="mb-0 text-dark">
+                {{ team.description }}
+              </p>
+            </div>
+          </div>
+
+          </div>
+
+        <div class="card blur shadow-blur border-radius-lg p-3">
+  <div class="row">
+
+    <div class="col-md-4 mb-md-0 mb-4">
+      <div class="info-horizontal border-radius-xl p-3 shadow-sm hover-shadow-lg transition-all h-100">
+        <div class="d-flex align-items-start w-100">
+          <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md flex-shrink-0">
+            <i class="fas fa-project-diagram opacity-10"></i>
+          </div>
+          <div class="description ps-3 flex-grow-1" style="min-width: 0;">
+            <h5 class="font-weight-bolder mb-1">Workers</h5>
+            <div class="custom-scroll pe-2" style="max-height: 100px; overflow-y: auto; width: 100%;">
+              {% if team.workers %}
+                {% for worker in team.workers.all %}
+                  <p class="text-sm mb-0 text-secondary border-bottom border-light py-1">
+                    <span class="text-dark font-weight-bold">{{ forloop.counter }}.</span>
+                    <a href="{% url 'task:worker-detail' pk=worker.id %}">
+                      {{ worker }}
+                    </a>
+                  </p>
+                {% endfor %}
+                {% else %}
+                  <p class="text-sm mb-0 text-danger border-bottom border-light py-1">No current workers</p><br>
+                  <a href="{% url 'task:project-list' %}?next={{ request.path }}" class="text-primary icon-move-right">View all projects
+                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                  </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4 mb-md-0 mb-4">
+      <div class="info-horizontal border-radius-xl p-3 shadow-sm hover-shadow-lg transition-all h-100">
+        <div class="d-flex align-items-start w-100">
+          <div class="icon icon-shape bg-gradient-success shadow text-center border-radius-md flex-shrink-0">
+            <i class="fas fa-tasks opacity-10"></i>
+          </div>
+          <div class="description ps-3 flex-grow-1" style="min-width: 0;">
+            <h5 class="font-weight-bolder mb-1">Projects</h5>
+            <div class="custom-scroll pe-2" style="max-height: 100px; overflow-y: auto; width: 100%;">
+              {% if team.projects.exists %}
+                {% for project in team.projects.all %}
+                  <p class="text-sm mb-0 text-secondary border-bottom border-light py-1">
+                    <span class="text-dark font-weight-bold">{{ forloop.counter }}.</span>
+                    <a href="{% url 'task:project-detail' pk=project.id %}">
+                      {{ project.name }}
+                    </a>
+                  </p>
+                {% endfor %}
+                {% else %}
+                  <p class="text-sm mb-0 text-danger border-bottom border-light py-1">No current projects</p><br>
+                  <a href="{% url 'task:project-list' %}?next={{ request.path }}" class="text-primary icon-move-right">View all projects
+                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                  </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="info-horizontal border-radius-xl p-3 shadow-sm hover-shadow-lg transition-all h-100">
+        <div class="d-flex align-items-start w-100">
+          <div class="icon icon-shape bg-gradient-warning shadow text-center border-radius-md flex-shrink-0">
+            <i class="fas fa-users opacity-10"></i>
+          </div>
+          <div class="description ps-3 flex-grow-1" style="min-width: 0;">
+            <h5 class="font-weight-bolder mb-1">Tasks</h5>
+            <div class="custom-scroll pe-2" style="max-height: 100px; overflow-y: auto; width: 100%;">
+              {% if team.tasks %}
+                {% for task in team.tasks %}
+                  <p class="text-sm mb-0 text-secondary border-bottom border-light py-1">
+                    <span class="text-dark font-weight-bold">{{ forloop.counter }}.</span>
+                    <a href="{% url 'task:task-detail' pk=task.id %}">
+                      {{ task.name }}
+                    </a>
+                  </p>
+                {% endfor %}
+                {% else %}
+                  <p class="text-sm mb-0 text-danger border-bottom border-light py-1">No current tasks</p><br>
+                  <a href="{% url 'task:task-list' %}?next={{ request.path }}" class="text-primary icon-move-right">View all tasks
+                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                  </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div> </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+{% endblock content %}
+
+<!-- Specific JS goes HERE --> 
+{% block javascripts %}
+
+  <script src="{{ ASSETS_ROOT }}/js/soft-design-system.min.js?v=1.0.1" type="text/javascript"></script>
+
+{% endblock javascripts %}

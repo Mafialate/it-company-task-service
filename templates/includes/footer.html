@@ -1,0 +1,66 @@
+<footer class="footer pt-5 mt-5">
+  <hr class="horizontal dark mb-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 mb-4 ms-auto">
+        <div>
+          <h6 class="text-gradient text-primary font-weight-bolder">Task Service</h6>
+          <p class="text-sm opacity-8">Simple & Efficient Tool for Team Management.</p>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-6 col-6 mb-4">
+        <div>
+          <h6 class="text-gradient text-primary text-sm">Management</h6>
+          <ul class="flex-column ms-n3 nav">
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:project-list' %}">Projects</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:task-list' %}">Tasks</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:team-list' %}">Teams</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-6 col-6 mb-4">
+        <div>
+          <h6 class="text-gradient text-primary text-sm">Staff</h6>
+          <ul class="flex-column ms-n3 nav">
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:worker-list' %}">Workers</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:position-list' %}">Positions</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:task-type-list' %}">Task Types</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-6 col-6 mb-4">
+        <div>
+          <h6 class="text-gradient text-primary text-sm">Support</h6>
+          <ul class="flex-column ms-n3 nav">
+            <li class="nav-item"><a class="nav-link" href="https://shortlink.uk/1sBq4">Help Center</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:contact-us' %}">Contact Us</a></li>
+            {% if user.is_staff %}
+            <li class="nav-item"><a class="nav-link text-danger" href="/admin/">Admin Panel</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-md-2 col-sm-6 col-6 mb-4 me-auto">
+        <div>
+          <h6 class="text-gradient text-primary text-sm">Legal</h6>
+          <ul class="flex-column ms-n3 nav">
+            <li class="nav-item"><a class="nav-link" href="{% url 'task:privacy' %}">Privacy Policy</a></li>
+            <li class="nav-item"><a class="nav-link" href="#">Terms & Conditions</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="text-center">
+          <p class="my-4 text-sm font-weight-bold text-dark">
+            &copy; {% now "Y" %} Task Service. Coded by Andrii Best.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

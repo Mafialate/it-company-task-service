@@ -1,0 +1,31 @@
+{% load crispy_forms_filters %}
+<header>
+  <div class="page-header section-height-85">
+    <div>
+      <img class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block border-radius-section border-top-end-radius-0 border-top-start-radius-0 border-bottom-end-radius-0"
+           src="{{ ASSETS_ROOT }}/img/curved-images/{{ object|yesno:'update,create' }}.jpg">
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 d-flex justify-content-center flex-column">
+          <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
+            <div class="text-center">
+              <h3 class="text-gradient text-primary">
+                {{ object|yesno:"Update,Create" }} {{ model_name }}
+              </h3>
+              <p class="mb-0">
+                Here you can {{ object|yesno:"update,create" }} {{ model_name }} you wish
+              </p>
+            </div>
+            <form action="" method="post" >
+              {% csrf_token %}
+              {{ form|crispy }}
+              <input type="submit" value="Submit" class="btn btn-success">
+              <a href="{{ request.GET.next|default:'/' }}" class="btn btn-primary">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>

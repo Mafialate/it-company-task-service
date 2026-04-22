@@ -1,0 +1,32 @@
+{% load crispy_forms_filters %}
+<header>
+  <div class="page-header section-height-85">
+    <div>
+      <img class="position-absolute fixed-top ms-auto w-50 h-100 z-index-0 d-none d-sm-none d-md-block border-radius-section border-top-end-radius-0 border-top-start-radius-0 border-bottom-end-radius-0"
+           src="{{ ASSETS_ROOT }}/img/curved-images/delete.jpg">
+    </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-7 d-flex justify-content-center flex-column">
+          <div class="card d-flex blur justify-content-center p-4 shadow-lg my-sm-0 my-sm-6 mt-8 mb-5">
+            <div class="text-center">
+              <h3 class="text-gradient text-primary">
+                Delete {{ model_name }}
+              </h3>
+              <p class="mb-0">
+                Are you sure you want to delete this {{ model_name }}?
+              </p>
+              <p>Once deleted, you won't be able to restore it.</p>
+            </div>
+            <form action="" method="post" class="d-flex justify-content-center align-items-center">
+              {% csrf_token %}
+              {{ form|crispy }}
+              <input type="submit" value="Delete" class="btn btn-danger me-3">
+              <a href="{{ request.GET.next|default:'/' }}" class="btn btn-success">Cancel</a>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
