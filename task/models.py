@@ -38,7 +38,7 @@ class Worker(AbstractUser):
 
     def __str__(self):
         position = self.position.name if self.position else "No position"
-        return f"{self.username} {position}"
+        return f"{self.username} - {position}"
 
 
 class Team(models.Model):
@@ -105,4 +105,4 @@ class Task(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name} {self.priority}"
+        return f"{self.name} - {self.priority}"
