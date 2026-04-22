@@ -47,7 +47,7 @@ class TaskTypeListView(LoginRequiredMixin, ListView):
     model = TaskType
     template_name = "task/task_type_list.html"
     context_object_name = "task_type_list"
-    paginate_by = 2
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,17 +64,20 @@ class TaskTypeListView(LoginRequiredMixin, ListView):
 
         return queryset
 
+
 class TaskTypeCreateView(LoginRequiredMixin, CreateView):
     model = TaskType
     fields = "__all__"
     template_name = "task/task_type_form.html"
     success_url = reverse_lazy("task:task-type-list")
 
+
 class TaskTypeUpdateView(LoginRequiredMixin, UpdateView):
     model = TaskType
     fields = "__all__"
     template_name = "task/task_type_form.html"
     success_url = reverse_lazy("task:task-type-list")
+
 
 class TaskTypeDeleteView(LoginRequiredMixin, DeleteView):
     model = TaskType
@@ -84,6 +87,7 @@ class TaskTypeDeleteView(LoginRequiredMixin, DeleteView):
 #Task CRUD
 class TaskListView(LoginRequiredMixin, ListView):
     model = Task
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -128,6 +132,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
 #Worker CRUD
 class WorkerListView(LoginRequiredMixin, ListView):
     model = get_user_model()
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -144,6 +149,7 @@ class WorkerListView(LoginRequiredMixin, ListView):
 
         return queryset
 
+
 class WorkerDetailView(LoginRequiredMixin, DetailView):
     model = get_user_model()
     fields = "__all__"
@@ -151,10 +157,12 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
     def get_queryset(self):
         return get_user_model().objects.all().prefetch_related("teams", "tasks").all()
 
+
 class WorkerCreateView(LoginRequiredMixin, CreateView):
     model = get_user_model()
     form_class = WorkerCreateForm
     success_url = reverse_lazy("task:worker-list")
+
 
 class WorkerUpdateView(LoginRequiredMixin, UpdateView):
     model = get_user_model()
@@ -169,6 +177,7 @@ class WorkerDeleteView(LoginRequiredMixin, DeleteView):
 #Position CRUD
 class PositionListView(LoginRequiredMixin, ListView):
     model = Position
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -206,6 +215,7 @@ class PositionDeleteView(LoginRequiredMixin, DeleteView):
 class TeamListView(LoginRequiredMixin, ListView):
     model = Team
     form_class = TeamSearchForm
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -248,6 +258,7 @@ class TeamDeleteView(LoginRequiredMixin, DeleteView):
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     queryset = Project.objects.all().prefetch_related("teams")
+    paginate_by = 10
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
