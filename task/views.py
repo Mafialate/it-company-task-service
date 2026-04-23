@@ -1,15 +1,12 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import (
     ListView,
     CreateView,
     UpdateView,
     DeleteView,
-    DetailView
+    DetailView, TemplateView
 )
 
 from task.forms import (
@@ -38,35 +35,29 @@ from task.models import (
 )
 
 
-@login_required
-def index(request: HttpRequest) -> HttpResponse:
-    tasks_num = Task.objects.count()
-    task_types_num = TaskType.objects.count()
-    workers_num = get_user_model().objects.count()
-    positions_num = Position.objects.count()
-    projects_num = Project.objects.count()
-    teams_num = Team.objects.count()
+class IndexView(LoginRequiredMixin, TemplateView):
+    template_name = "task/index.html"
 
-    context = {
-        "tasks_num": tasks_num,
-        "task_types_num": task_types_num,
-        "workers_num": workers_num,
-        "positions_num": positions_num,
-        "projects_num": projects_num,
-        "teams_num": teams_num,
-    }
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update({
+            "tasks_num": Task.objects.count(),
+            "task_types_num": TaskType.objects.count(),
+            "workers_num": get_user_model().objects.count(),
+            "positions_num": Position.objects.count(),
+            "projects_num": Project.objects.count(),
+            "teams_num": Team.objects.count(),
+        })
 
-    return render(request, "task/index.html", context=context)
+        return context
 
 
-@login_required
-def contact_us(request: HttpRequest) -> HttpResponse:
-    return render(request, "task/page-contact-us.html")
+class ContactUsView(LoginRequiredMixin, TemplateView):
+    template_name = "task/page-contact-us.html"
 
 
-@login_required
-def privacy(request: HttpRequest) -> HttpResponse:
-    return render(request, "task/page-privacy.html")
+class PrivacyView(LoginRequiredMixin, TemplateView):
+    template_name = "task/page-privacy.html"
 
 
 class TaskTypeListView(LoginRequiredMixin, ListView):
