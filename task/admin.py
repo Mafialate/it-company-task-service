@@ -3,6 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 
 from task.models import Worker, Task, Position, TaskType
 
+
 @admin.register(Worker)
 class WorkerAdmin(UserAdmin):
     list_display = UserAdmin.list_display + ("position",)
@@ -23,7 +24,6 @@ class WorkerAdmin(UserAdmin):
             },
         ),
     )
-
 
 
 @admin.register(Task)

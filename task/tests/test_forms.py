@@ -8,6 +8,7 @@ from task.forms import (
 )
 from task.models import Team
 
+
 class FormTests(TestCase):
 
     def test_position_search_form_placeholder(self):

@@ -2,7 +2,13 @@ from django.test import TestCase
 from django.contrib.auth import get_user_model
 from datetime import date
 
-from task.models import Position, TaskType, Team, Project, Task
+from task.models import (
+    Position,
+    TaskType,
+    Team,
+    Project,
+    Task
+)
 
 
 class ModelTests(TestCase):

@@ -13,6 +13,13 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='task',
             name='priority',
-            field=models.CharField(choices=[('Urgent', 'Urgent'), ('High', 'High'), ('Medium', 'Medium'), ('Low', 'Low')], default='Medium', max_length=10),
+            field=models.CharField(
+                choices=[
+                    ('Urgent', 'Urgent'),
+                    ('High', 'High'),
+                    ('Medium', 'Medium'),
+                    ('Low', 'Low')
+                ],
+                default='Medium', max_length=10),
         ),
     ]

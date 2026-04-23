@@ -4,12 +4,38 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
+from django.views.generic import (
+    ListView,
+    CreateView,
+    UpdateView,
+    DeleteView,
+    DetailView
+)
 
-from task.forms import TaskTypesSearchForm, PositionSearchForm, WorkerSearchForm, WorkerCreateForm, \
-    WorkerPositionUpdateForm, ProjectSearchForm, ProjectUpdateForm, TaskSearchForm, PositionUpdateForm, TaskCreateForm, \
-    TaskUpdateForm, TeamSearchForm, TeamCreateForm, TeamUpdateForm, ProjectCreateForm
-from task.models import Position, TaskType, Task, Team, Project
+from task.forms import (
+    TaskTypesSearchForm,
+    PositionSearchForm,
+    WorkerSearchForm,
+    WorkerCreateForm,
+    WorkerPositionUpdateForm,
+    ProjectSearchForm,
+    ProjectUpdateForm,
+    TaskSearchForm,
+    PositionUpdateForm,
+    TaskCreateForm,
+    TaskUpdateForm,
+    TeamSearchForm,
+    TeamCreateForm,
+    TeamUpdateForm,
+    ProjectCreateForm
+)
+from task.models import (
+    Position,
+    TaskType,
+    Task,
+    Team,
+    Project
+)
 
 
 @login_required
@@ -32,17 +58,17 @@ def index(request: HttpRequest) -> HttpResponse:
 
     return render(request, "task/index.html", context=context)
 
-#Contact us page
+
 @login_required
 def contact_us(request: HttpRequest) -> HttpResponse:
     return render(request, "task/page-contact-us.html")
 
-#Privacy page
+
 @login_required
 def privacy(request: HttpRequest) -> HttpResponse:
     return render(request, "task/page-privacy.html")
 
-#TaskType CRUD
+
 class TaskTypeListView(LoginRequiredMixin, ListView):
     model = TaskType
     template_name = "task/task_type_list.html"
@@ -84,7 +110,7 @@ class TaskTypeDeleteView(LoginRequiredMixin, DeleteView):
     template_name = "task/task_type_confirm_delete.html"
     success_url = reverse_lazy("task:task-type-list")
 
-#Task CRUD
+
 class TaskListView(LoginRequiredMixin, ListView):
     model = Task
     paginate_by = 10
@@ -129,7 +155,7 @@ class TaskDeleteView(LoginRequiredMixin, DeleteView):
     model = Task
     success_url = reverse_lazy("task:task-list")
 
-#Worker CRUD
+
 class WorkerListView(LoginRequiredMixin, ListView):
     model = get_user_model()
     paginate_by = 10
@@ -155,7 +181,9 @@ class WorkerDetailView(LoginRequiredMixin, DetailView):
     fields = "__all__"
 
     def get_queryset(self):
-        return get_user_model().objects.all().prefetch_related("teams", "tasks").all()
+        return get_user_model().objects.all().prefetch_related(
+            "teams", "tasks"
+        ).all()
 
 
 class WorkerCreateView(LoginRequiredMixin, CreateView):
@@ -174,7 +202,7 @@ class WorkerDeleteView(LoginRequiredMixin, DeleteView):
     model = get_user_model()
     success_url = reverse_lazy("task:worker-list")
 
-#Position CRUD
+
 class PositionListView(LoginRequiredMixin, ListView):
     model = Position
     paginate_by = 10
@@ -211,7 +239,7 @@ class PositionDeleteView(LoginRequiredMixin, DeleteView):
     model = Position
     success_url = reverse_lazy("task:position-list")
 
-#Team CRUD
+
 class TeamListView(LoginRequiredMixin, ListView):
     model = Team
     form_class = TeamSearchForm
@@ -254,7 +282,7 @@ class TeamDeleteView(LoginRequiredMixin, DeleteView):
     model = Team
     success_url = reverse_lazy("task:team-list")
 
-#Project CRUD
+
 class ProjectListView(LoginRequiredMixin, ListView):
     model = Project
     queryset = Project.objects.all().prefetch_related("teams")

@@ -46,7 +46,9 @@ class Team(models.Model):
         max_length=255,
         unique=True,
     )
-    workers = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name="teams",)
+    workers = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name="teams",
+    )
 
     @property
     def tasks(self):
@@ -66,8 +68,9 @@ class Project(models.Model):
     teams = models.ManyToManyField(Team, related_name="projects")
 
     def workers(self):
-        return Worker.objects.filter(teams__projects=self).select_related("position").distinct()
-
+        return Worker.objects.filter(
+            teams__projects=self
+        ).select_related("position").distinct()
 
     def __str__(self):
         return self.name

@@ -206,7 +206,9 @@ class PrivateTaskTest(TestCase):
         )
         self.client.force_login(self.user)
 
-        self.project = Project.objects.create(name="Main", deadline=date(2026, 1, 1))
+        self.project = Project.objects.create(
+            name="Main", deadline=date(2026, 1, 1)
+        )
         self.task_type = TaskType.objects.create(name="Bug")
 
         self.task = Task.objects.create(

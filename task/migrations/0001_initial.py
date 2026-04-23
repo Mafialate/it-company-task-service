@@ -84,14 +84,20 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Team',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(
+                    auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+                 ),
                 ('name', models.CharField(max_length=255, unique=True)),
-                ('workers', models.ManyToManyField(related_name='teams', to=settings.AUTH_USER_MODEL)),
+                ('workers', models.ManyToManyField(
+                    related_name='teams', to=settings.AUTH_USER_MODEL)
+                 ),
             ],
         ),
         migrations.AddField(
             model_name='project',
             name='teams',
-            field=models.ManyToManyField(related_name='projects', to='task.team'),
+            field=models.ManyToManyField(
+                related_name='projects', to='task.team'
+            ),
         ),
     ]
