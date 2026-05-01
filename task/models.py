@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-from it_company_task_service import settings
+from it_company_task_service.settings import base
 
 
 class Position(models.Model):
@@ -47,7 +47,7 @@ class Team(models.Model):
         unique=True,
     )
     workers = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name="teams",
+        base.AUTH_USER_MODEL, related_name="teams",
     )
 
     @property
@@ -98,7 +98,7 @@ class Task(models.Model):
         related_name="tasks",
     )
     workers = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
+        base.AUTH_USER_MODEL,
         related_name="tasks",
     )
     task_type = models.ForeignKey(
