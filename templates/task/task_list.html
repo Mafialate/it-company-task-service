@@ -1,0 +1,169 @@
+{% extends 'layouts/base.html' %}
+{% load crispy_forms_filters %}
+
+{% block content %}
+
+  {% include "includes/navigation-light.html" %}
+
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-lg-12 mx-auto">
+        <div class="w-25">
+          <h3>Tasks</h3>
+          <nav aria-label="breadcrumb">
+            <form method="get">
+              {{ search_form|crispy }}
+              <input class="btn btn-success" type="submit" value="Search">
+            </form>
+          </nav>
+        </div>
+
+        <div class="position-relative border-radius-xl overflow-hidden shadow-lg mb-7">
+          <div class="container border-bottom">
+            <div class="row py-3">
+              <div class="col-lg-4 text-start">
+                <p class="lead text-dark pt-1 mb-0">Every TASKS</p>
+              </div>
+              <div class="col-lg-4 mt-1 text-center">
+                <span class="badge bg-light text-dark"><i class="fas fa-lock me-1" aria-hidden="true"></i>TASKS</span>
+              </div>
+              {% if user.is_staff %}
+                <div class="col-lg-4 text-end my-auto">
+                  <a href="{% url 'task:task-create' %}?next={{ request.path }}" class="text-primary icon-move-right">Create a new TASK
+                    <i class="fas fa-arrow-right text-sm ms-1" aria-hidden="true"></i>
+                  </a>
+                </div>
+              {% endif %}
+            </div>
+          </div>
+          <div>
+            {#     Tasks Table     #}
+            <div class="card">
+              <div class="table-responsive">
+                <table class="table align-items-center mb-0">
+                  <thead>
+                    <tr>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">ID</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Name</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Description</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Deadline</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Is completed</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Priority</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Project</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Workers</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder">Task type</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder" style="width: 1%">Edit</th>
+                      <th class="text-center text-uppercase text-primary text-xxs font-weight-bolder" style="width: 1%">Delete</th>
+                  </thead>
+                  <tbody>
+                    {% for task in task_list %}
+                    <tr>
+                      <td class="align-middle">
+                        <p class="text-center text-dark mb-0">{{ forloop.counter }}</p>
+                      </td>
+                      <td class="align-middle">
+                        <p class="text-center text-dark mb-0">
+                          <a href="{% url 'task:task-detail' pk=task.id %}">
+                            {{ task.name }}
+                          </a>
+                        </p>
+                      </td>
+                      <td class="align-middle">
+                        <p class="text-center text-dark mb-0">
+                          <button type="button"
+                                  class="text-dark btn-sm p-0"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#descModal{{ task.id }}">
+                            View info
+                          </button>
+                        </p>
+
+                        <div class="modal fade" id="descModal{{ task.id }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Task: {{ task.name }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body text-start">
+                                {{ task.description|linebreaks }}
+                              </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="align-middle">
+                        <p class="text-center text-dark mb-0">{{ task.deadline }}</p>
+                      </td>
+                      <td class="align-middle">
+                          {% if task.is_completed%}
+                            <p class="text-center text-success mb-0">Completed</p>
+                          {% else %}
+                            <p class="text-center text-danger mb-0">In Progress</p>
+                          {% endif %}
+                      </td>
+                      <td class="align-middle">
+                        <p class="text-center text-dark mb-0">{{ task.priority }}</p>
+                      </td>
+                      <td class="align-middle">
+                        <p class="text-center text-dark mb-0">
+                          <a href="{% url 'task:project-detail' pk=task.project.id %}">
+                            {{ task.project }}
+                          </a>
+                        </p>
+                      </td>
+                       <td class="align-middle">
+                        <p class="text-center text-dark mb-0">
+                          <button type="button"
+                                  class="text-dark btn-sm p-0"
+                                  data-bs-toggle="modal"
+                                  data-bs-target="#workersModal{{ task.id }}"> View workers
+                          </button>
+                        </p>
+
+                        <div class="modal fade" id="workersModal{{ task.id }}" tabindex="-1" aria-hidden="true">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <h5 class="modal-title">Workers of {{ task.name }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body text-start">
+                                 <ul class="list-group list-group-flush">
+                                  {% for worker in task.workers.all %}
+                                    <li class="list-group-item text-dark">
+                                      <a class="text-primary" href="{% url 'task:worker-detail' pk=worker.pk %}">{{ worker.username }}</a>
+                                      — <small class="text-dark">{{ worker.position.name }}</small>
+                                    </li>
+                                  {% empty %}
+                                    <li class="list-group-item">No workers assigned.</li>
+                                  {% endfor %}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="align-middle">
+                        <p class="text-center text-dark mb-0">{{ task.task_type }}</p>
+                      </td>
+                      <td class="align-middle text-center" style="width: 1%; white-space: nowrap;">
+                        <a class="btn btn-sm btn-primary mb-0" href="{% url 'task:task-update' pk=task.pk %}?next={{ request.path }}">Edit</a>
+                      </td>
+                      <td class="align-middle text-center" style="width: 1%; white-space: nowrap;">
+                        <a class="btn btn-sm btn-danger mb-0" href="{% url 'task:task-delete' pk=task.pk %}?next={{ request.path }}">Delete</a>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                {% include "includes/pagination.html" %}
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+{% endblock content %}
